@@ -1,0 +1,165 @@
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+#define URL_SIZE 200
+
+char history[MAX][URL_SIZE];
+int currentIndex = -1;
+int totalPages = 0;
+
+void visitPage()
+{
+    char url[URL_SIZE];
+
+    printf("\nEnter website URL: ");
+    scanf("%199s", url);
+
+    // Remove forward history
+    totalPages = currentIndex + 1;
+
+    if (totalPages >= MAX)
+    {
+        printf("History is full!\n");
+        return;
+    }
+
+    strcpy(history[totalPages], url);
+
+    currentIndex++;
+    totalPages++;
+
+    printf("Page visited successfully!\n");
+}
+
+void goBack()
+{
+    if (currentIndex > 0)
+    {
+        currentIndex--;
+        printf("Moved Back to: %s\n",
+               history[currentIndex]);
+    }
+    else
+    {
+        printf("No previous page available!\n");
+    }
+}
+
+void goForward()
+{
+    if (currentIndex < totalPages - 1)
+    {
+        currentIndex++;
+        printf("Moved Forward to: %s\n",
+               history[currentIndex]);
+    }
+    else
+    {
+        printf("No forward page available!\n");
+    }
+}
+
+void displayCurrentPage()
+{
+    if (currentIndex == -1)
+    {
+        printf("\nNo page currently visited.\n");
+    }
+    else
+    {
+        printf("\nCurrent Page: %s\n",
+               history[currentIndex]);
+    }
+}
+
+void displayHistory()
+{
+    int i;
+
+    if (totalPages == 0)
+    {
+        printf("\nBrowsing history is empty!\n");
+        return;
+    }
+
+    printf("\n--- Browser History ---\n");
+
+    for (i = 0; i < totalPages; i++)
+    {
+        printf("%d. %s", i + 1, history[i]);
+
+        if (i == currentIndex)
+        {
+            printf(" <-- Current Page");
+        }
+
+        printf("\n");
+    }
+}
+
+void clearHistory()
+{
+    totalPages = 0;
+    currentIndex = -1;
+
+    printf("\nBrowsing history cleared!\n");
+}
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        printf("\n===== BROWSER HISTORY SIMULATOR =====\n");
+        printf("1. Visit New Page\n");
+        printf("2. Back\n");
+        printf("3. Forward\n");
+        printf("4. Display Current Page\n");
+        printf("5. Display Browser History\n");
+        printf("6. Clear History\n");
+        printf("7. Exit\n");
+
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                visitPage();
+                break;
+
+            case 2:
+                goBack();
+                break;
+
+            case 3:
+                goForward();
+                break;
+
+            case 4:
+                displayCurrentPage();
+                break;
+
+            case 5:
+                displayHistory();
+                break;
+
+            case 6:
+                clearHistory();
+                break;
+
+            case 7:
+                printf("\nExiting Browser History Simulator...\n");
+                break;
+
+            default:
+                printf("\nInvalid choice! Try again.\n");
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
